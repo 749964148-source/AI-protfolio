@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 产品项目案例">
+  <title>项目案例</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="case-study-已修改.css">
+</head>
+<body>
+  <div class="cursor-lens" aria-hidden="true"><span></span></div>
+  <div class="case-progress"><i></i></div>
+  <header class="case-nav">
+    <a class="back" href="index-已修改.html#top"><span>←</span> 返回作品集</a>
+    <div class="case-switcher">
+      <a data-case-link="ehs" href="case-study-已修改.html?case=ehs">01 EHS Buddy</a>
+      <a data-case-link="hop" href="case-study-已修改.html?case=hop">02 HOP</a>
+      <a data-case-link="passage" href="case-study-已修改.html?case=passage">03 通行大师</a>
+      <a data-case-link="garden" href="case-study-已修改.html?case=garden">04 Garden</a>
+    </div>
+  </header>
+
+  <main id="case-root" aria-live="polite"></main>
+
+  <template id="case-template">
+    <article class="case">
+      <section class="case-hero">
+        <canvas id="case-canvas" aria-hidden="true"></canvas>
+        <div class="case-hero-grain"></div>
+        <div class="case-shell case-hero-inner">
+          <div class="case-kicker"><span data-field="index"></span><span data-field="category"></span></div>
+          <h1 data-field="title"></h1>
+          <p class="case-subtitle" data-field="subtitle"></p>
+          <div class="case-meta" data-list="meta"><a class="hero-demo-pill interactive" data-field="demoHref" target="_blank" rel="noopener"><span data-field="demoLabel">打开 Demo</span><b>↗</b></a></div>
+          <div class="case-results" data-list="results"></div>
+        </div>
+      </section>
+    </article>
+  </template>
+
+  <script src="case-study-已修改.js"></script>
+</body>
+</html>
