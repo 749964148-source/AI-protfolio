@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+onlyBuiltDependencies:
+  - "@next/swc-win32-x64-msvc"
+  - esbuild
+  - sharp
+  - unrs-resolver

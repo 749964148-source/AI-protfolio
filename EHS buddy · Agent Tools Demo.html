@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!-- saved from url=(0152)file:///C:/Users/74996/Desktop/%E4%BD%9C%E5%93%81%E9%9B%86%E7%81%AD%E6%8E%89%E5%85%A8%E4%B8%96%E7%95%8C/EHS%20buddy%20%C2%B7%20Agent%20Tools%20Demo.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>EHS buddy · Agent Tools Demo</title>
+  <style>
+    :root{--bg:#f7f8fa;--panel:#fff;--ink:#1f2937;--muted:#7b8491;--line:#e5e7eb;--blue:#2563eb;--bluebg:#eff5ff;--red:#d94752;--green:#1d8b64;--shadow:0 10px 30px #1f29370a}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,"Microsoft YaHei",sans-serif}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{min-height:100vh;display:grid;grid-template-columns:248px minmax(0,1fr);transition:grid-template-columns .22s ease}
+    .app.drawer-open{grid-template-columns:248px minmax(0,1fr) 360px}
+    .sidebar{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:100vh}
+    .brand{font-size:17px;font-weight:800;padding:22px 22px 24px;display:flex;gap:10px;align-items:center}
+    .brand-icon{width:29px;height:29px;border-radius:8px;background:#1f2937;color:#fff;display:grid;place-items:center}
+    .side-actions{padding:0 14px}
+    .side-btn{width:100%;padding:10px 12px;border:0;background:transparent;text-align:left;border-radius:8px;color:#4b5563;font-size:14px}
+    .side-btn:hover,.side-btn.active{background:#eff2f5;color:#1f2937;font-weight:700}
+    .side-btn .ico{display:inline-block;width:25px;color:#64748b}
+    .search{margin:12px 14px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;color:#9aa3af}
+    .history{border-top:1px solid var(--line);margin-top:3px;padding:16px 14px}
+    .history-label{font-size:11px;color:#9aa3af;margin:8px}
+    .thread{padding:10px;border-radius:7px;color:#4b5563;cursor:pointer}
+    .thread:hover,.thread.active{background:#f1f3f6;color:#1f2937}
+    .profile{margin-top:auto;border-top:1px solid var(--line);padding:15px 16px;display:flex;gap:10px;align-items:center}
+    .avatar{width:34px;height:34px;border-radius:50%;background:#111827;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+    .profile small{color:var(--muted);display:block}
+    .main{min-width:0;display:flex;flex-direction:column;height:100vh}
+    .top{height:61px;border-bottom:1px solid var(--line);background:#fff;display:flex;align-items:center;padding:0 28px;justify-content:space-between;flex:none}
+    .top .title{font-weight:700}
+    .connection{font-size:12px;color:var(--muted)}
+    .connection i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#35af7a;margin-right:5px}
+    .view{display:none;padding:46px 48px;overflow:auto;height:calc(100vh - 61px)}
+    .view.active{display:block}
+    .welcome{text-align:center;max-width:720px;margin:62px auto 0}
+    .welcome h1{font-size:44px;letter-spacing:-1.5px;margin:0 0 7px}
+    .welcome h1 span{color:var(--red)}
+    .welcome p{color:var(--muted);margin:0 0 27px;font-size:15px}
+    .composer{border:1px solid #d7dce3;border-radius:13px;background:#fff;box-shadow:0 8px 24px #1f29370a}
+    .composer textarea{width:100%;border:0;outline:0;padding:17px;min-height:104px;resize:none}
+    .composebar{display:flex;align-items:center;gap:12px;padding:11px 13px;color:#6b7280;border-top:1px solid #edf0f3;font-size:12px}
+    .composebar .grow{flex:1}
+    .icon-btn{border:0;background:transparent;color:#6b7280;font-size:17px;padding:4px}
+    .send{border:0;background:#1f2937;color:#fff;width:30px;height:30px;border-radius:7px}
+    .connect{margin-top:28px;color:#8a94a3;font-size:12px}
+    .connect span{margin:0 9px;color:#697586}
+    .reply{margin-top:24px;text-align:left}
+    .panel-title{font-size:26px;margin:0 0 6px}
+    .panel-sub{color:var(--muted);margin:0 0 24px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+    .agent-tools{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:16px;margin-top:28px}
+    .tool-card{position:relative;aspect-ratio:1.35;border:1px solid #e7eaf0;background:#fff;border-radius:17px;padding:20px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 6px 18px #1f293707;transition:.18s ease}
+    .tool-card:hover{transform:translateY(-3px);border-color:#b9c8e8;box-shadow:0 14px 28px #1f293712}
+    .tool-card.primary:hover{background:#f8fbff}
+    .tool-icon{width:38px;height:38px;border-radius:10px;background:#f0f4f8;display:grid;place-items:center;font-size:19px;color:#334155}
+    .tool-card.primary .tool-icon{background:#edf4ff;color:var(--blue)}
+    .tool-card h3{font-size:16px;margin:0 0 4px}
+    .tool-card p{font-size:12px;color:var(--muted);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tool-state{position:absolute;right:14px;top:14px;font-size:11px;border-radius:99px;padding:3px 7px;background:#eef8f3;color:#237655}
+    .tool-card.pending .tool-state{background:#f1f3f5;color:#8a94a3}
+    .grid2{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px}
+    .label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    .textarea,.input{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;outline:0}
+    .drop{border:1.5px dashed #cbd5e1;border-radius:9px;padding:23px;text-align:center;color:var(--muted);margin-top:12px;cursor:pointer}
+    .drop.ready{border-color:var(--green);background:#effaf5;color:#176443}
+    .btn{border:0;border-radius:8px;background:var(--blue);color:#fff;padding:10px 14px;font-weight:700}
+    .btn.secondary{background:#eef2f6;color:#3f4b5c}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+    .field{background:#f8fafc;border-radius:7px;padding:10px}.field small{display:block;color:var(--muted)}.field b{display:block}
+    .steps{display:grid;gap:9px}.step{padding:11px;background:#f8fafc;border-left:3px solid #cbd5e1;border-radius:6px}.step.done{border-color:var(--green);background:#effaf5}
+    .mapwrap{height:610px;position:relative;overflow:hidden;padding:0}
+    .mapcanvas{position:absolute;inset:0;background:#dbe8e5}
+    .mapcanvas.fallback{background-color:#dbe8e5;background-image:linear-gradient(30deg,transparent 0 47%,#b7cfca 48% 49%,transparent 50%),linear-gradient(90deg,transparent 0 43%,#c5d8d4 44% 47%,transparent 48%),linear-gradient(150deg,transparent 0 55%,#c6d6d2 56% 57%,transparent 58%);background-size:230px 180px,170px 220px,280px 190px}
+    .mapnote{position:absolute;right:14px;top:14px;background:#ffffffde;padding:8px 11px;border-radius:7px;color:#556274;font-size:12px}
+    .routebox{position:absolute;left:18px;top:18px;width:300px;padding:16px;z-index:2}.routebox h3{margin:0 0 12px}
+    .routeopts{display:flex;gap:6px;margin-top:8px}.routeopts button{flex:1;padding:8px;border:1px solid var(--line);background:#fff;border-radius:7px}.routeopts button.sel{border-color:var(--blue);color:var(--blue)}
+    .routeinfo{display:flex;justify-content:space-between;margin:12px 0;color:var(--muted);font-size:12px}
+    .route-svg{position:absolute;inset:0;width:100%;height:100%;z-index:1}.risky{fill:var(--red);stroke:#fff;stroke-width:4}
+    .risklabel{position:absolute;z-index:2;background:#fff;padding:7px 10px;border-radius:7px;font-size:11px;box-shadow:0 4px 15px #0002}.rl1{left:47%;top:20%}.rl2{left:62%;top:49%}.rl3{left:37%;bottom:18%}
+    .config{position:absolute;bottom:14px;left:14px;right:14px;z-index:3;display:flex;gap:7px}.config input{flex:1}
+    .riskmap{height:560px;position:relative;overflow:hidden;background:#eef2f4;background-image:linear-gradient(#96a2aa22 1px,transparent 1px),linear-gradient(90deg,#96a2aa22 1px,transparent 1px);background-size:34px 34px}
+    .zones{position:absolute;inset:34px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);gap:8px}
+    .zone{border:1px solid #9aa7ad;color:#7c8990;font-size:10px;display:grid;place-items:center;background:#ffffff44}
+    .haz{position:absolute;width:42px;height:42px;border:4px solid #fff;border-radius:50%;background:#59636b;color:#fff;font-weight:800;box-shadow:0 0 0 5px #59636b35}.haz.high{background:var(--red);box-shadow:0 0 0 6px #e23b4530}.h1{right:14%;top:21%}.h2{right:22%;top:53%}.h3{right:31%;bottom:12%}.h4{left:26%;top:47%}
+    .legend{position:absolute;left:15px;top:15px;background:#fff;padding:9px;border:1px solid var(--line);border-radius:8px;z-index:2}.legend button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px}.legend button.on{border-color:var(--blue);color:var(--blue)}
+    .riskdetail{position:absolute;right:18px;bottom:18px;width:300px;z-index:2}
+    .walkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.mobile{min-height:500px;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}.mhead{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700}.mbody{padding:16px}
+    .record{margin-top:215px;width:62px;height:62px;border-radius:50%;border:0;background:var(--red);color:#fff;font-size:23px;display:block;margin-left:auto;margin-right:auto}.record.live{animation:pulse 1s infinite}@keyframes pulse{50%{box-shadow:0 0 0 10px #d9475222}}
+    .preview{height:110px;background:linear-gradient(135deg,#334155,#94a3b8);border-radius:8px;display:grid;place-items:center;color:#fff;margin-bottom:12px}.summary{padding:11px;background:#f8fafc;border-radius:8px}.action{padding:11px;background:#fff7df;border-left:3px solid #dda82e;margin-top:10px}
+    .skillbar{border-left:1px solid var(--line);background:#fff;min-width:0;height:100vh}.skillbar.closed{display:none}
+    .skillhead{height:61px;border-bottom:1px solid var(--line);padding:16px 20px;font-size:20px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+    .close-drawer{border:0;background:transparent;color:#7b8491;font-size:22px;padding:3px 7px;border-radius:6px}.close-drawer:hover{background:#f0f2f5;color:#111827}
+    .skilltabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+    .skilltabs button{border:0;background:#fff;padding:13px 5px;color:#6b7280}.skilltabs button.active{color:#1f2937;font-weight:700;border-bottom:2px solid var(--blue)}
+    .skillcontent{padding:15px 16px;overflow:auto;height:calc(100vh - 108px)}.skillsearch{padding:10px 11px;border:1px solid var(--line);border-radius:8px;color:#9aa3af;margin-bottom:12px}
+    .skillfilter{display:flex;gap:6px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:8px}.skillfilter button{border:0;background:transparent;color:#7b8491;padding:7px 6px}.skillfilter button.active{color:var(--blue);border-bottom:2px solid var(--blue)}
+    .skillitem{padding:15px 5px;border-bottom:1px solid #edf0f3}.skillitem h4{margin:0 0 5px;font-size:15px}.skillitem p{margin:0;color:#6b7280;font-size:12px}.item-actions{float:right;display:flex;gap:4px}.item-actions button{border:0;background:transparent;color:#8a94a3;padding:3px}
+    .tags{display:flex;gap:6px;margin-bottom:7px}.tag{background:#edf3ff;color:#4c6ba5;border-radius:99px;padding:3px 8px;font-size:11px}.tag.green{background:#eaf7ef;color:#30805b}
+    .schedule{padding:15px 5px;border-bottom:1px solid #edf0f3}.schedule b{display:block}.schedule small{color:var(--muted)}
+    [data-tip]{position:relative}
+    [data-tip]:hover::after{content:attr(data-tip);position:absolute;z-index:1000;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);width:max-content;max-width:240px;padding:7px 9px;border-radius:7px;background:#17202d;color:#fff;font-size:11px;font-weight:500;line-height:1.35;box-shadow:0 6px 20px #0003;pointer-events:none;white-space:normal;text-align:center}
+    [data-tip]:hover::before{content:"";position:absolute;z-index:1001;left:50%;bottom:calc(100% + 4px);border:5px solid transparent;border-top-color:#17202d;transform:translateX(-50%)}
+    .tool-card[data-tip]:hover::after{bottom:auto;top:14px;left:50%;transform:translateX(-50%)}.tool-card[data-tip]:hover::before{display:none}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;background:#1f2937;color:#fff;padding:10px 15px;border-radius:7px;transition:.2s;z-index:1100}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .hide{display:none!important}
+    @media(max-width:1200px){.agent-tools{grid-template-columns:repeat(2,minmax(170px,1fr))}.app.drawer-open{grid-template-columns:220px minmax(0,1fr) 330px}.app{grid-template-columns:220px minmax(0,1fr)}.view{padding:34px}.grid2,.walkgrid{grid-template-columns:1fr}}
+    @media(max-width:850px){.skillbar{position:fixed;right:0;top:0;width:min(360px,92vw);z-index:900;box-shadow:-12px 0 30px #0002}.app.drawer-open,.app{grid-template-columns:64px 1fr}.brand{justify-content:center;padding:18px 0}.brand span,.side-btn span,.search,.history,.profile>div:last-child{display:none}.side-btn{text-align:center;padding:12px 4px}.side-btn .ico{width:auto}.view{padding:25px 18px}.welcome h1{font-size:32px}}
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">✦</div><span>EHS Buddy</span></div>
+    <div class="side-actions">
+      <button class="side-btn active" data-view="home" data-tip="开始一个新的 EHS 对话"><span class="ico">＋</span><span>新对话</span></button>
+      <button class="side-btn" data-view="tools" data-tip="打开全部 Agent 功能模块"><span class="ico">▦</span><span>Agent 工具</span></button>
+      <button class="side-btn" data-drawer="skills" data-tip="打开右侧技能面板"><span class="ico">ϟ</span><span>技能</span></button>
+      <button class="side-btn" data-drawer="schedule" data-tip="查看和管理定时任务"><span class="ico">▣</span><span>定时任务</span></button>
+    </div>
+    <div class="search" data-tip="搜索历史对话">⌕　搜索对话…</div>
+    <div class="history">
+      <div class="history-label">今天</div>
+      <div class="thread active" data-tip="打开今天的新对话">新对话 <span style="float:right;color:#9aa3af">22:00</span></div>
+      <div class="history-label" style="margin-top:20px">更早</div>
+      <div class="thread" data-tip="打开 8 月 26 日对话">新对话 <span style="float:right;color:#9aa3af">8/26</span></div>
+      <div class="thread" data-tip="打开现场风险检查记录">现场风险检查 <span style="float:right;color:#9aa3af">8/26</span></div>
+    </div>
+    <div class="profile"><div class="avatar">JL</div><div><b>Jiapei Liu</b><small>Global · Environmental, Health and Safety</small></div></div>
+  </aside>
+
+  <main class="main">
+    <header class="top"><div class="title" id="pageTitle">EHS buddy</div><div class="connection"><i></i> MyEHS connected</div></header>
+
+    <section id="home" class="view active">
+      <div class="welcome">
+        <h1>Hi, <span>Jiapei Liu</span></h1>
+        <p>隐患、行动项、SDS、巡检，直接说。</p>
+        <div class="composer">
+          <textarea id="homeInput" placeholder="描述任务，Agent 自动执行…" data-tip="输入要处理的 EHS 任务"></textarea>
+          <div class="composebar">
+            <button class="icon-btn" data-tip="添加照片或文档">📎</button>
+            <span class="grow">EHS buddy · connected</span>
+            <button class="icon-btn" data-tip="按住说话">🎙</button>
+            <button id="homeSend" class="send" data-tip="发送任务">➤</button>
+          </div>
+        </div>
+        <div class="connect">连接 <span>▧ MyEHS</span><span>▣ Excel</span><span>▤ Word</span><span>▱ Teams</span><span>✉ 邮件</span></div>
+        <div id="homeReply" class="reply"></div>
+      </div>
+    </section>
+
+    <section id="tools" class="view">
+      <h2 class="panel-title">Agent 工具</h2>
+      <p class="panel-sub">选择要进入的工作模块。</p>
+      <div class="agent-tools">
+        <button class="tool-card primary" data-jump="charge" data-tip="打开 Take Charge">
+          <span class="tool-state">可用</span><span class="tool-icon">⚡</span><span><h3>Take Charge</h3><p>记录风险并提交风险单</p></span>
+        </button>
+        <button class="tool-card primary" data-jump="route" data-tip="打开安全试驾路线">
+          <span class="tool-state">可用</span><span class="tool-icon">⌁</span><span><h3>安全试驾路线</h3><p>规划并查看道路风险</p></span>
+        </button>
+        <button class="tool-card primary" data-jump="risk" data-tip="打开风险标记">
+          <span class="tool-state">可用</span><span class="tool-icon">◉</span><span><h3>风险标记</h3><p>在区域图中定位风险作业</p></span>
+        </button>
+        <button class="tool-card primary" data-jump="walk" data-tip="打开走查">
+          <span class="tool-state">可用</span><span class="tool-icon">✓</span><span><h3>走查</h3><p>采集现场记录并形成闭环</p></span>
+        </button>
+        <button class="tool-card pending" data-pending="Action" data-tip="Action 模块正在接入">
+          <span class="tool-state">接入中</span><span class="tool-icon">↗</span><span><h3>Action</h3><p>创建、分配与跟进行动项</p></span>
+        </button>
+        <button class="tool-card pending" data-pending="Inspection" data-tip="Inspection 模块正在接入">
+          <span class="tool-state">接入中</span><span class="tool-icon">▤</span><span><h3>Inspection</h3><p>执行检查表与结果归档</p></span>
+        </button>
+        <button class="tool-card pending" data-pending="EHSRN" data-tip="EHSRN 模块正在接入">
+          <span class="tool-state">接入中</span><span class="tool-icon">◎</span><span><h3>EHSRN</h3><p>访问 EHS 业务知识网络</p></span>
+        </button>
+        <button class="tool-card pending" data-pending="待开发" data-tip="此位置预留给后续功能">
+          <span class="tool-state">规划中</span><span class="tool-icon">＋</span><span><h3>待开发...</h3><p>更多 Agent 能力</p></span>
+        </button>
+      </div>
+    </section>
+
+    <section id="charge" class="view">
+      <h2 class="panel-title">Take Charge</h2><p class="panel-sub">记录现场风险，生成并提交风险单。</p>
+      <div class="grid2">
+        <div class="card"><label class="label">现场描述</label><textarea id="hazardText" class="textarea" placeholder="描述风险或改善机会…" data-tip="输入或录入风险描述"></textarea><div class="drop" id="dropPhoto" data-tip="上传现场照片">📷 点击上传照片<br><small>识别物体、位置与风险类型</small></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn secondary" id="voiceBtn" data-tip="使用语音录入风险">🎙 语音输入</button><button class="btn" id="analyzeBtn" data-tip="分析描述和照片" disabled="">AI 分析并填表</button></div><div id="chargeFields" class="fields"></div></div>
+        <aside class="card"><span class="label">处理进度</span><div class="steps"><div id="c1" class="step">01 · 语音与图片理解</div><div id="c2" class="step">02 · 风险字段填写</div><div id="c3" class="step">03 · 确认并提交</div></div></aside>
+      </div>
+    </section>
+
+    <section id="route" class="view">
+      <h2 class="panel-title">Safe Routes</h2><p class="panel-sub">用高德地图规划安全试驾路线。</p>
+      <div class="card mapwrap">
+        <div id="mapCanvas" class="mapcanvas fallback"></div><div class="mapnote" id="mapNote">高德 MCP 路线 · 义乌北苑工业园 → 义乌北苑</div>
+        <svg class="route-svg" viewBox="0 0 1000 600" preserveAspectRatio="none"><polyline id="mainRoute" points="180,500 420,470 460,330 720,340 760,160 530,150 500,250 330,240" fill="none" stroke="#2563eb" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1100" stroke-dashoffset="1100"></polyline><g><circle class="risky" cx="460" cy="330" r="10"></circle><circle class="risky" cx="760" cy="160" r="10"></circle><circle class="risky" cx="500" cy="250" r="10"></circle></g></svg>
+        <div class="card routebox"><h3>路线配置</h3><input class="input" id="routePlace" value="义乌北苑 · 试驾场" data-tip="输入试驾地点"><div class="routeopts"><button class="sel" data-tip="选择路线 A">Route A</button><button data-tip="选择路线 B">Route B</button><button data-tip="选择路线 C">Route C</button></div><div class="routeinfo"><b style="color:var(--ink)">7.7 km · 22 min</b><span>3 个风险点</span></div><button id="planRoute" class="btn" style="width:100%" data-tip="生成安全路线">生成安全路线</button></div>
+        <div class="risklabel rl1"><b>Top 1 · 复杂路口</b><br>进入前减速，确认两侧车流</div><div class="risklabel rl2"><b>Top 2 · 急转弯</b><br>视距有限，预留制动距离</div><div class="risklabel rl3"><b>Top 3 · 加速区</b><br>确认前方净空后再操作</div>
+        <div class="config"><input class="input" id="amapKey" placeholder="输入 AMap JS API Key 加载真实底图" data-tip="输入高德地图 Web 端 Key"><button class="btn secondary" id="loadMap" data-tip="加载真实高德地图">加载高德地图</button></div>
+      </div>
+    </section>
+
+    <section id="risk" class="view">
+      <h2 class="panel-title">风险标记</h2><p class="panel-sub">将非标准地址解析为点、线、区域或整层。</p>
+      <div class="card riskmap">
+        <div class="zones">
+          <div class="zone">LOGISTIC</div><div class="zone">ASSEMBLY</div><div class="zone">STATOR EQ</div><div class="zone">BUFFER</div><div class="zone">PM STATOR</div><div class="zone">UTILITY</div><div class="zone">ASSEMBLY</div><div class="zone">LOGISTIC</div><div class="zone">BUFFER</div><div class="zone">STATOR EQ</div><div class="zone">UTILITY</div><div class="zone">ASSEMBLY</div><div class="zone">LOGISTIC</div><div class="zone">BUFFER</div><div class="zone">PM STATOR</div><div class="zone">UTILITY</div><div class="zone">ASSEMBLY</div><div class="zone">LOGISTIC</div><div class="zone">BUFFER</div><div class="zone">STATOR EQ</div><div class="zone">UTILITY</div><div class="zone">ASSEMBLY</div><div class="zone">LOGISTIC</div><div class="zone">BUFFER</div>
+        </div>
+        <div class="legend"><button class="on" data-tip="按点定位">● 点</button><button data-tip="按线定位">━ 线</button><button data-tip="按区域定位">▭ 区</button><button data-tip="按整层定位">▣ 整层</button></div>
+        <button class="haz high h1" data-tip="查看高风险动火作业">火</button><button class="haz h2" data-tip="查看通行影响">通</button><button class="haz high h3" data-tip="查看高风险动火作业">火</button><button class="haz h4" data-tip="查看通行影响">通</button>
+        <div id="riskDetail" class="card riskdetail"><b>点击标记查看风险作业</b><p style="color:var(--muted);margin:5px 0 0">地图保留未匹配地址，供 EHS 人员修正。</p></div>
+      </div>
+    </section>
+
+    <section id="walk" class="view">
+      <h2 class="panel-title">走查</h2><p class="panel-sub">现场采集后生成摘要、行动项与邮件。</p>
+      <div class="walkgrid">
+        <div class="mobile"><div class="mhead">Collection <span style="float:right;color:var(--muted);font-size:12px">EHS 周检查</span></div><div class="mbody"><b>Shanghai LinGang Site</b><div id="recordEmpty" style="height:230px;display:grid;place-items:center;text-align:center;color:var(--muted)">No records yet<br><small>点击录音按钮开始采集</small></div><div id="recordResult" class="hide"><div class="preview">photo · spill</div><div class="summary">办公区发现桌面脏乱，物品堆放凌乱，影响现场 5S 管理。</div></div><button id="recordBtn" class="record" data-tip="开始现场录音">🎙</button></div></div>
+        <div class="mobile"><div class="mhead">Analysis Results</div><div class="mbody"><span class="label">Summary</span><div id="summary4" class="summary">等待现场记录…</div><span class="label" style="margin-top:18px">Action items</span><div id="action4" class="action">尚未生成</div></div></div>
+        <div class="mobile"><div class="mhead">Email Preview</div><div class="mbody"><input class="input" value="jiapeiliu@ai.com" data-tip="邮件收件人"><input class="input" style="margin-top:8px" value="【巡查报告】EHS 周检查" data-tip="邮件主题"><textarea id="email4" class="textarea" style="margin-top:8px" data-tip="邮件正文">等待生成邮件摘要…</textarea><button id="send4" class="btn" style="margin-top:8px" data-tip="发送巡查摘要" disabled="">发送摘要</button></div></div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="skillbar closed" id="skillbar">
+    <div class="skillhead"><span>技能</span><button id="closeDrawer" class="close-drawer" data-tip="关闭技能面板">×</button></div>
+    <div class="skilltabs"><button data-tab="tools" data-tip="查看已连接工具">工具</button><button class="active" data-tab="skills" data-tip="查看已安装技能">技能</button><button data-tab="schedule" data-tip="查看定时任务">定时</button></div>
+    <div class="skillcontent">
+      <div class="skillsearch">⌕　<span id="searchPlaceholder">搜索技能</span></div>
+      <div id="toolPanel" class="hide"><div class="skillfilter"><button class="active" data-tip="已连接 4">已连接 4</button><button data-tip="团队 8">团队 8</button><button data-tip="平台 12">平台 12</button></div><div class="skillitem"><span class="item-actions"><button data-tip="查看 MyEHS">◉</button><button data-tip="添加 MyEHS">＋</button></span><h4>MyEHS</h4><div class="tags"><span class="tag">平台</span><span class="tag green">已连接</span></div><p>查询和提交 Take Charge、行动项、SDS 与巡检记录。</p></div><div class="skillitem"><span class="item-actions"><button data-tip="查看高德地图">◉</button><button data-tip="添加高德地图">＋</button></span><h4>高德地图</h4><div class="tags"><span class="tag">平台</span><span class="tag green">已连接</span></div><p>地址解析、POI 查询与驾车路线规划。</p></div><div class="skillitem"><span class="item-actions"><button data-tip="查看 Microsoft Graph">◉</button><button data-tip="添加 Microsoft Graph">＋</button></span><h4>Microsoft Graph</h4><div class="tags"><span class="tag">平台</span><span class="tag green">已连接</span></div><p>发送邮件、Teams 通知与共享文件。</p></div></div>
+      <div id="skillPanel"><div class="skillfilter"><button class="active" data-tip="已安装 4">已安装 4</button><button data-tip="团队 3">团队 3</button><button data-tip="平台 6">平台 6</button></div><div class="skillitem"><span class="item-actions"><button data-tip="查看技能">◉</button><button data-tip="添加技能">＋</button></span><h4>MyEHS 通用筛选</h4><div class="tags"><span class="tag">EHS buddy</span><span class="tag green">已安装</span></div><p>用自然语言筛选 TCH、ACT、SDS、巡检记录。</p></div><div class="skillitem"><span class="item-actions"><button data-tip="查看技能">◉</button><button data-tip="添加技能">＋</button></span><h4>事故事件分析</h4><div class="tags"><span class="tag">EHS buddy</span><span class="tag green">已安装</span></div><p>基于事件记录生成 SAFE 经验教训与纠正行动。</p></div><div class="skillitem"><span class="item-actions"><button data-tip="查看技能">◉</button><button data-tip="添加技能">＋</button></span><h4>走查摘要</h4><div class="tags"><span class="tag">EHS buddy</span><span class="tag green">已安装</span></div><p>将语音、照片整理为行动项与邮件草稿。</p></div></div>
+      <div id="schedulePanel" class="hide"><button class="btn secondary" style="width:100%;margin-bottom:10px" data-tip="新建定时任务">＋ 新建</button><div class="skillfilter"><button class="active" data-tip="全部 2">全部 2</button><button data-tip="运行中 1">运行中 1</button><button data-tip="已暂停 1">已暂停 1</button></div><div class="schedule"><b>每日风险待办提醒</b><small>工作日 09:00 · 运行中</small></div><div class="schedule"><b>每周走查摘要</b><small>周五 17:30 · 已暂停</small></div></div>
+    </div>
+  </aside>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1500)};
+  const titles={home:'EHS buddy',tools:'Agent 工具',charge:'Take Charge',route:'Safe Routes',risk:'风险标记',walk:'走查'};
+  function show(v){$$('.view,.side-btn').forEach(e=>e.classList.remove('active'));$('#'+v).classList.add('active');const nav=document.querySelector(`[data-view="${v}"]`);if(nav)nav.classList.add('active');$('#pageTitle').textContent=titles[v]||'EHS buddy'}
+  function setDrawer(tab){$('#app').classList.add('drawer-open');$('#skillbar').classList.remove('closed');$$('.side-btn').forEach(e=>e.classList.remove('active'));const trigger=document.querySelector(`[data-drawer="${tab}"]`);if(trigger)trigger.classList.add('active');switchTab(tab)}
+  function closeDrawer(){$('#app').classList.remove('drawer-open');$('#skillbar').classList.add('closed');$$('.side-btn').forEach(e=>e.classList.remove('active'));const current=document.querySelector('.view.active');const nav=current&&document.querySelector(`[data-view="${current.id}"]`);if(nav)nav.classList.add('active')}
+  function switchTab(tab){$$('.skilltabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));['toolPanel','skillPanel','schedulePanel'].forEach(x=>$('#'+x).classList.add('hide'));const panels={tools:'toolPanel',skills:'skillPanel',schedule:'schedulePanel'};$('#'+panels[tab]).classList.remove('hide');$('#searchPlaceholder').textContent=tab==='tools'?'搜索工具':tab==='skills'?'搜索技能':'搜索定时任务'}
+  $$('[data-view]').forEach(b=>b.onclick=()=>{closeDrawer();show(b.dataset.view)});
+  $$('[data-drawer]').forEach(b=>b.onclick=()=>setDrawer(b.dataset.drawer));
+  $$('.skilltabs button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+  $('#closeDrawer').onclick=closeDrawer;
+  $$('[data-jump]').forEach(b=>b.onclick=()=>{closeDrawer();show(b.dataset.jump)});
+  $$('[data-pending]').forEach(b=>b.onclick=()=>toast(`${b.dataset.pending} 模块正在接入`));
+  $('#homeSend').onclick=()=>{$('#homeReply').innerHTML='<div class="card"><b>已为你安排今天的现场风险检查</b><p style="color:var(--muted);margin:6px 0 0">已读取检查计划，并通知区域负责人。</p></div>';toast('Agent 已完成任务')};
+  let spoken=false,photo=false;
+  function sync(){ $('#analyzeBtn').disabled=!(spoken&&photo);if(spoken&&photo)$('#c1').classList.add('done') }
+  $('#voiceBtn').onclick=async()=>{const b=$('#voiceBtn');b.textContent='● 录音中';await new Promise(r=>setTimeout(r,700));$('#hazardText').value='A-3 工位附近发现裸露线缆，人员每日经过，存在绊倒风险。';b.textContent='🎙 语音输入';spoken=true;sync();toast('已转写现场描述')};
+  $('#dropPhoto').onclick=()=>{photo=true;$('#dropPhoto').classList.add('ready');$('#dropPhoto').innerHTML='<b>✓ hazard_photo.jpg</b><br><small>已识别：线缆、通道、绊倒风险</small>';sync()};
+  $('#analyzeBtn').onclick=async()=>{const b=$('#analyzeBtn');b.textContent='分析中…';await new Promise(r=>setTimeout(r,650));$('#chargeFields').innerHTML='<div class="field"><small>Category</small><b>Slip / Trip / Fall</b></div><div class="field"><small>Severity</small><b>Medium</b></div><div class="field"><small>Location</small><b>A-3 · Building A</b></div><div class="field"><small>Owner</small><b>Facilities</b></div><button class="btn" style="grid-column:1/-1" id="submitCharge" data-tip="提交 Take Charge 风险单">确认提交</button>';$('#c2').classList.add('done');b.textContent='分析完成';$('#submitCharge').onclick=()=>{$('#c3').classList.add('done');toast('已创建并分配风险单')};toast('风险字段已填写')};
+  $('#planRoute').onclick=()=>{const l=$('#mainRoute');l.style.transition='stroke-dashoffset 1.4s ease';l.style.strokeDashoffset='0';toast('已生成路线与 3 个风险点')};
+  $$('.routeopts button').forEach(b=>b.onclick=()=>{$$('.routeopts button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')});
+  $('#loadMap').onclick=()=>{const key=$('#amapKey').value.trim();if(!key){toast('请先输入 AMap JS API Key');return}localStorage.setItem('ehs_amap_key',key);const s=document.createElement('script');s.src=`https://webapi.amap.com/maps?v=2.0&key=${encodeURIComponent(key)}`;s.onload=()=>{new AMap.Map('mapCanvas',{zoom:13,center:[120.036575,29.316925],viewMode:'2D'});$('#mapCanvas').classList.remove('fallback');$('#mapNote').textContent='高德地图 · 真实道路底图已加载';toast('高德地图已加载')};s.onerror=()=>toast('地图加载失败，请检查 Key 与域名白名单');document.head.appendChild(s)};
+  const rd=$('#riskDetail');$$('.haz').forEach((b,i)=>b.onclick=()=>{rd.innerHTML=`<b style="color:${b.classList.contains('high')?'var(--red)':'var(--amber)'}">${b.classList.contains('high')?'高风险':'通行影响'}</b><h3 style="margin:6px 0">${['动火作业 · G5-G8','物流通道封闭 · B区','临时动火 · 7-14轴','人员通行 · D04'][i]}</h3><p style="color:var(--muted);margin:0">系统已解析定位并叠加到对应底图区域。</p>`;toast('已定位风险作业')});
+  $$('.legend button').forEach(b=>b.onclick=()=>{$$('.legend button').forEach(x=>x.classList.remove('on'));b.classList.add('on');toast('已切换地址解析粒度')});
+  $('#recordBtn').onclick=async()=>{const b=$('#recordBtn');b.classList.add('live');await new Promise(r=>setTimeout(r,800));b.classList.remove('live');$('#recordEmpty').classList.add('hide');$('#recordResult').classList.remove('hide');$('#summary4').textContent='本次 EHS 周检查发现办公区存在桌面脏乱问题，影响现场 5S 管理。';$('#action4').innerHTML='<b>清理桌面杂物、规范物品摆放</b><br>Owner: 区域负责人 · Due: 08/21';$('#email4').value='本次巡查发现办公区桌面物品堆放凌乱。AI 已生成行动项：清理杂物并保持公共区域整洁。';$('#send4').disabled=false;toast('已生成行动项')};
+  $('#send4').onclick=()=>toast('巡查摘要邮件已发送');
+  const saved=localStorage.getItem('ehs_amap_key');if(saved)$('#amapKey').value=saved;
+  $$('button').forEach(b=>{if(!b.dataset.tip)b.dataset.tip=b.textContent.trim()||'可操作入口'});
+</script>
+
+
+</body></html>

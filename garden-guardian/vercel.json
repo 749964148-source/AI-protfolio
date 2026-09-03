@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "functions": {
+    "app/api/diagnose/route.ts": { "maxDuration": 60 },
+    "app/api/tasks/route.ts": { "maxDuration": 60 }
+  }
+}
