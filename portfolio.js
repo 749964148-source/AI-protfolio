@@ -118,15 +118,17 @@
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const element = entry.target;
+      const unit = element.querySelector('small');
+      const format = (value) => `${value.toLocaleString('en-US')}${unit ? `<small>${unit.textContent}</small>` : ''}`;
       const target = Number(element.dataset.count || 0);
       if (reduceMotion) {
-        element.textContent = target.toLocaleString('en-US');
+        element.innerHTML = format(target);
       } else {
         const start = performance.now();
         const tick = (now) => {
           const progress = Math.min((now - start) / 900, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
-          element.textContent = Math.round(target * eased).toLocaleString('en-US');
+          element.innerHTML = format(Math.round(target * eased));
           if (progress < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);
